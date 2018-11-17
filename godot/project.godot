@@ -29,6 +29,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://combat/CombatAction.gd"
 }, {
+"base": "Node",
+"class": "Formation",
+"language": "GDScript",
+"path": "res://combat/battlers/Formation.gd"
+}, {
 "base": "Reference",
 "class": "Hit",
 "language": "GDScript",
@@ -38,6 +43,11 @@ _global_script_classes=[ {
 "class": "Job",
 "language": "GDScript",
 "path": "res://combat/battlers/Job.gd"
+}, {
+"base": "Node",
+"class": "Party",
+"language": "GDScript",
+"path": "res://Party.gd"
 }, {
 "base": "Resource",
 "class": "StartingStats",
@@ -54,8 +64,10 @@ _global_script_class_icons={
 "BattlerAnim": "",
 "CharacterStats": "",
 "CombatAction": "",
+"Formation": "",
 "Hit": "",
 "Job": "",
+"Party": "",
 "StartingStats": "",
 "TurnQueue": ""
 }

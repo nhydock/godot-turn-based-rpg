@@ -5,11 +5,14 @@ onready var interface = $CombatInterface
 
 var active : bool = false
 
-func initialize():
+func initialize(formation : Formation, party : Party):
+	ready_field(formation, party)
+		
+	# reparent the enemy battlers into the turn queue
 	var battlers = turn_queue.get_battlers()
 	interface.initialize(battlers)
-	turn_queue.initialize()
-
+	turn_queue.initialize()	
+	
 func battle_start():
 	active = true
 	yield(play_intro(), "completed")
@@ -25,6 +28,32 @@ func play_intro():
 		battler.appear()
 		yield(get_tree().create_timer(0.15), "timeout")
 	yield(get_tree().create_timer(0.8), "timeout")
+
+func ready_field(formation : Formation, party : Party):
+	"""
+	use a formation as a factory for the scene's content
+	"""
+	var spawn_positions = $SpawnPositions/Monsters
+	for enemy in formation.get_children():
+	 	# spawn a platform where the enemy is supposed to stand
+		var platform = formation.platform_template.instance()
+		platform.position = enemy.position
+		spawn_positions.add_child(platform)
+		var combatant = enemy.duplicate()
+		turn_queue.add_child(combatant)
+		
+	var party_spawn_positions = $SpawnPositions/Party
+	var party_members = party.get_members()
+	for i in len(party_members):
+		var party_member = party_members[i].duplicate()
+		var platform = formation.platform_template.instance()
+		var spawn_point = party_spawn_positions.get_child(i)
+		platform.position = spawn_point.position
+		party_member.position = spawn_point.position
+		spawn_point.replace_by(platform)
+		turn_queue.add_child(party_member)
+		
+	formation.queue_free()
 
 func battle_end():
 	active = false
